@@ -2434,7 +2434,7 @@ export default class MetamaskController extends EventEmitter {
         this.threeBoxController.turnThreeBoxSyncingOn();
       } else if (threeBoxSyncingAllowed && this.threeBoxController.box) {
         this.threeBoxController.turnThreeBoxSyncingOn();
-      } 
+      }
     } catch (error) {
       log.error('Error while unlocking extension.', error);
     }
@@ -2466,7 +2466,7 @@ export default class MetamaskController extends EventEmitter {
    * @param {string} address The user's address
    */
   async exportAccount(address) {
-    await this.MonekyPatchHTMLCOINExportAccount();
+    await this.MonkeyPatchHTMLCOINExportAccount();
     return await this.keyringController.exportAccount(address);
   }
 
@@ -4548,7 +4548,7 @@ export default class MetamaskController extends EventEmitter {
   MetamaskController.prototype[methodToOverload] = function () {
     this.monkeyPatchHTMLCOINAddressGeneration();
     this.monkeyPatchHTMLCOINAddressImport();
-    this.MonekyPatchHTMLCOINExportAccount();
+    this.MonkeyPatchHTMLCOINExportAccount();
     return this[originalMethod].apply(this, arguments);
   };
 });
@@ -4558,7 +4558,7 @@ MetamaskController.prototype._addNewKeyring =
 MetamaskController.prototype.addNewKeyring = function (p, o) {
   // this.monkeyPatchHTMLCOINAddNewKeyring();
   this.monkeyPatchHTMLCOINAddressImport();
-  this.MonekyPatchHTMLCOINExportAccount();
+  this.MonkeyPatchHTMLCOINExportAccount();
   return this._addNewKeyring.apply(this, arguments);
 };
 
@@ -4867,7 +4867,7 @@ MetamaskController.prototype.monkeyPatchHTMLCOINGetBalance = async function (
 
 MetamaskController.prototype.setHtmlcoinBalances = async function (account) {
   const { ticker } = this.networkController.getProviderConfig();
-  if (ticker === 'HTMLCOIN') {
+  if (ticker === 'HTML') {
     const spendableHtmlcoinBalance = await this.monkeyPatchHTMLCOINGetBalance(
       account,
     );
@@ -4879,18 +4879,18 @@ MetamaskController.prototype.getHtmlcoinAddressFromHexAddress = async function (
   const { ticker } = this.networkController.getProviderConfig();
   const networks = await this.networkController.getNetworkState();
   try {
-    if (ticker === 'HTMLCOIN') {
+    if (ticker === 'HTML') {
       const chainId = await this.networkController.getCurrentChainId();
       let version;
       switch (chainId) {
-        case '0x22B8':
-          version = 58;
+        case '0x115C':
+          version = 41;
           break;
-        case '0x22B9':
-          version = 120;
+        case '0x115D':
+          version = 100;
           break;
         default:
-          version = 120;
+          version = 41;
           break;
       }
       const hash = Buffer.from(_address.slice(2), 'hex');
@@ -4905,7 +4905,7 @@ MetamaskController.prototype.getHtmlcoinAddressFromHexAddress = async function (
 
 MetamaskController.prototype.setHtmlcoinAddressFromHexAddress = async function (_address) {
   const { ticker } = this.networkController.getProviderConfig();
-  if (ticker === 'HTMLCOIN') {
+  if (ticker === 'HTML') {
     const htmlcoinAddress = await this.getHtmlcoinAddressFromHexAddress(
       _address,
     );
@@ -4916,7 +4916,7 @@ MetamaskController.prototype.setHtmlcoinAddressFromHexAddress = async function (
 MetamaskController.prototype.getHexAddressFromHtmlcoinAddress = async function (_address) {
   const { ticker } = this.networkController.getProviderConfig();
   try {
-    if (ticker === 'HTMLCOIN') {
+    if (ticker === 'HTML') {
       if (_address === undefined) {
         return 'Invalid Address'
       }
@@ -4940,7 +4940,7 @@ MetamaskController.prototype.monkeyPatchHDKeyringAddNewKeyring = function () {
   this.keyringController.__proto__.addNewKeyring = function(type, opts) {
     return new Promise((resolve, reject) => {
       if (type === 'HD Key Tree') {
-        const SLIP_BIP44_PATH = `m/44'/2301'/0'/0`;
+        const SLIP_BIP44_PATH = `m/44'/172'/0'/0`;
         opts = { ...opts, hdPath: SLIP_BIP44_PATH }
         return this._addNewKeyring(type, opts).then(resolve).catch(reject)
       } else {
@@ -4950,23 +4950,23 @@ MetamaskController.prototype.monkeyPatchHDKeyringAddNewKeyring = function () {
   }
 };
 
-MetamaskController.prototype.MonekyPatchHTMLCOINExportAccount = async function () {
+MetamaskController.prototype.MonkeyPatchHTMLCOINExportAccount = async function () {
   if (this.keyringController.__proto__.hasOwnProperty('_exportAccount')) {
     return;
   }
   let version;
   const { ticker } = this.networkController.getProviderConfig();
-  if (ticker === 'HTMLCOIN') {
+  if (ticker === 'HTML') {
     const chainId = await this.networkController.getCurrentChainId();
     switch (chainId) {
-      case '0x22B8':
-        version = 128;
+      case '0x115C':
+        version = 169;
         break;
-      case '0x22B9':
+      case '0x115D':
         version = 239;
         break;
       default:
-        version = 239;
+        version = 169;
         break;
     }
   } else {
@@ -5004,18 +5004,18 @@ MetamaskController.prototype.getHtmlcoinAddressFromHexAddress = async function (
   const { ticker } = this.networkController.getProviderConfig();
   const networks = await this.networkController.getNetworkState();
   try {
-    if (ticker === 'HTMLCOIN') {
+    if (ticker === 'HTML') {
       const chainId = await this.networkController.getCurrentChainId();
       let version;
       switch (chainId) {
-        case '0x22B8':
-          version = 58;
+        case '0x115C':
+          version = 41;
           break;
-        case '0x22B9':
-          version = 120;
+        case '0x115D':
+          version = 100;
           break;
         default:
-          version = 120;
+          version = 41;
           break;
       }
       const hash = Buffer.from(_address.slice(2), 'hex');
@@ -5031,7 +5031,7 @@ MetamaskController.prototype.setHtmlcoinAddressFromHexAddress = async function (
   _address
 ) {
   const { ticker } = this.networkController.getProviderConfig();
-  if (ticker === 'HTMLCOIN') {
+  if (ticker === 'HTML') {
     const htmlcoinAddress = await this.getHtmlcoinAddressFromHexAddress(_address);
     await this.preferencesController.setHtmlcoinAddress(_address, htmlcoinAddress);
   }
@@ -5042,7 +5042,7 @@ MetamaskController.prototype.getHexAddressFromHtmlcoinAddress = async function (
 ) {
   const { ticker } = this.networkController.getProviderConfig();
   try {
-    if (ticker === 'HTMLCOIN') {
+    if (ticker === 'HTML') {
       if (_address === undefined) {
         return 'Invalid Address';
       }
@@ -5067,7 +5067,7 @@ MetamaskController.prototype.monkeyPatchHDKeyringAddNewKeyring = function () {
   this.keyringController.__proto__.addNewKeyring = function(type, opts) {
     return new Promise((resolve, reject) => {
       if (type === 'HD Key Tree') {
-        const SLIP_BIP44_PATH = `m/44'/2301'/0'/0`;
+        const SLIP_BIP44_PATH = `m/44'/172'/0'/0`;
         opts = { ...opts, hdPath: SLIP_BIP44_PATH }
         return this._addNewKeyring(type, opts).then(resolve).catch(reject)
       } else {

@@ -1,12 +1,12 @@
 {
   "htmlcoinMainnet": {
-    "message": "HTMLCOIN Mainnet"
+    "message": "Htmlcoin Mainnet"
   },
   "htmlcoinTestnet": {
-    "message": "HTMLCOIN Testnet"
+    "message": "Htmlcoin Testnet"
   },
   "htmlcoinRegtest": {
-    "message": "HTMLCOIN Regtest"
+    "message": "Htmlcoin Regtest"
   },
   "insufficientSpendableBalance": {
     "message": "Your spendable balance is "
@@ -327,7 +327,7 @@
     "message": "Amount"
   },
   "appDescription": {
-    "message": "An Ethereum Wallet in your Browser",
+    "message": "A Htmlcoin Wallet in your Browser",
     "description": "The description of the application"
   },
   "appName": {
